@@ -7,7 +7,7 @@ $(document).ready(function () {
 
     let todo = [];
 
-    const onFormSubmit = () => {    //Наполняет массив и назначает свойства его элементам
+    const onFormSubmit = () => {          //Наполняет массив и назначает свойства его элементам
         todo.push({
             id: Math.random(),
             status: false,
@@ -19,9 +19,14 @@ $(document).ready(function () {
         console.log(todo);
     }
 
+    const render = () => {                //Отрисовывает ненумерованный список
+        $todoList.append(`<li id="${todo[todo.length - 1].id}"><span>${todo[todo.length - 1].text}</span></li>`);
+    }
+
     $form.on('submit', function (event) { //обработчик события отправки формы
         event.preventDefault();
         onFormSubmit();
+        render();
     })
 
 });
