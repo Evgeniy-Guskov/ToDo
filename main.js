@@ -1,9 +1,8 @@
 $(document).ready(function () {
 
-    const
-        $form = $('#form'),
-        $text = $('#text'),
-        $todoList = $('#todoList');
+    const $form = $('#form');
+    const $text = $('#text');
+    const $todoList = $('#todoList');
 
     let todo = [];
 
@@ -19,14 +18,17 @@ $(document).ready(function () {
         console.log(todo);
     }
 
-    const render = () => {                //Отрисовывает ненумерованный список
-        $todoList.append(`<li id="${todo[todo.length - 1].id}"><span>${todo[todo.length - 1].text}</span></li>`);
-    }
+    const render = (arr) => {                //Отрисовывает ненумерованный список
+        $('li.todoList').remove();
 
+        $.each(arr, function (index) {
+            $todoList.append(`<li class="todoList" id="${arr[index].id}"><span>${arr[index].text}</span></li>`);
+        })
+    }
     $form.on('submit', function (event) { //обработчик события отправки формы
         event.preventDefault();
         onFormSubmit();
-        render();
+        render(todo);
     })
 
 });
