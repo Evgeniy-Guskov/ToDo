@@ -19,12 +19,15 @@ $(document).ready(function () {
     }
 
     const render = (arr) => {                //Отрисовывает ненумерованный список
-        $('li.todoList').remove();
+        let content = '';
 
-        $.each(arr, function (index) {
-            $todoList.append(`<li class="todoList" id="${arr[index].id}"><span>${arr[index].text}</span></li>`);
-        })
+        arr.forEach((item) => {
+            content += `<li class="todoList" id="${item.id}"><span>${item.text}</span></li>`
+        });
+
+        $todoList.html(content);
     }
+
     $form.on('submit', function (event) { //обработчик события отправки формы
         event.preventDefault();
         onFormSubmit();
