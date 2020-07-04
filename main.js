@@ -6,18 +6,6 @@ $(document).ready(function () {
 
     let todo = [];
 
-    const onFormSubmit = () => {          //Наполняет массив и назначает свойства его элементам
-        todo.push({
-            id: Math.random(),
-            status: false,
-            text: $text.val(),
-        });
-
-        $text.val('');
-
-        console.log(todo);
-    }
-
     const render = (arr) => {                //Отрисовывает ненумерованный список
         let content = '';
 
@@ -28,10 +16,20 @@ $(document).ready(function () {
         $todoList.html(content);
     }
 
+    const onFormSubmit = () => {          //Наполняет массив, назначает свойства его элементам; рисует список
+        todo.push({
+            id: Math.random(),
+            status: false,
+            text: $text.val(),
+        });
+
+        $text.val('');
+
+        render(todo);
+    }
+
     $form.on('submit', function (event) { //обработчик события отправки формы
         event.preventDefault();
         onFormSubmit();
-        render(todo);
-    })
-
+    });
 });
