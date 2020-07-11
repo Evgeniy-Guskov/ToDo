@@ -10,7 +10,7 @@ $(document).ready(function () {
         let content = '';
 
         arr.forEach(item => {
-            content += `<li id="${item.id}"><span>${item.text}</span><button class="DeleteButton">Done</li>`
+            content += `<li id="${item.id}"><span>${item.text}</span><button class="delete-button">&#10060;</li>`
         });
 
         $todoList.html(content);
@@ -34,16 +34,17 @@ $(document).ready(function () {
         onFormSubmit();
     });
 
-    $todoList.on('click', '.DeleteButton', function (event) {   //делегированный обработчик события клика на кнопку Done
-        event.preventDefault();
-
-        $(this).parent().remove();
-
-        todo.forEach(item => {
+    $todoList.on('click', '.delete-button', function (event) {   //делегированный обработчик события клика на кнопку Done
+        let idChecker = (item => {
             if (item.id == $(this).parent().attr('id')) {
-                todo.splice(todo.indexOf(item), 1);
+                return true;
             }
         });
-    })
 
-});
+        let arrayIndex = todo.findIndex(idChecker);
+
+        todo.splice(arrayIndex, 1);
+
+        render(todo);
+    });
+})
