@@ -34,14 +34,12 @@ $(document).ready(function () {
         onFormSubmit();
     });
 
-    $todoList.on('click', '.delete-button', function (event) {   //делегированный обработчик события клика на кнопку Done
-        let idChecker = (item => {
-            if (item.id == $(this).parent().attr('id')) {
-                return true;
-            }
+    $todoList.on('click', '.delete-button', function (event) {   //делегированный обработчик события клика на кнопку крестика
+        const idChecker = (item => {
+            return item.id == $(this).parent().attr('id')
         });
 
-        let arrayIndex = todo.findIndex(idChecker);
+        const arrayIndex = todo.findIndex(idChecker);
 
         todo.splice(arrayIndex, 1);
 
