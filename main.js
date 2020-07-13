@@ -4,13 +4,20 @@ $(document).ready(function () {
     const $todoList = $('#todoList');
 
     const delete_button = `<button class="delete-button">&#10060;</button>`;
-    
+    const checkbox = `<input type="checkbox" class="checkbox">`;
+    const checkedCheckbox = `<input type="checkbox" class="checkbox" checked>`;
+
     let todo = [];
 
     const render = (arr) => {
         let content = '';
         arr.forEach(item => {
-            content += `<li id="${item.id}"><span>${item.text}</span>${delete_button}</li>`
+            if (item.status === true) {
+                content += `<li id="${item.id}" class="checked-checkbox">
+                ${checkedCheckbox}<span>${item.text}</span>${delete_button}</li >`;
+            } else {
+                content += `<li id="${item.id}">${checkbox}<span>${item.text}</span>${delete_button}</li >`;
+            }
         });
         $todoList.html(content);
     }
@@ -31,9 +38,17 @@ $(document).ready(function () {
     });
 
     $todoList.on('click', '.delete-button', function () {
-        const arrayIndex = todo.findIndex(item => String(item.id) === $(this).parent().attr('id'));
-        if (arrayIndex !== -1) {
-            todo.splice(arrayIndex, 1);
+        const deletedTuskIndex = todo.findIndex(item => String(item.id) === $(this).parent().attr('id'));
+        if (deletedTuskIndex !== -1) {
+            todo.splice(deletedTuskIndex, 1);
+            render(todo);
+        }
+    });
+
+    $todoList.on('click', '.checkbox', function () {
+        const checkedTuskIndex = todo.findIndex(item => String(item.id) === $(this).parent().attr('id'));
+        if (checkedTuskIndex !== -1) {
+            todo[checkedTuskIndex].status = !todo[checkedTuskIndex].status;
             render(todo);
         }
     });
