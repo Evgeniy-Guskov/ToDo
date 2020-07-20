@@ -10,8 +10,8 @@ $(document).ready(function () {
     const render = (arr) => {
         let content = '';
         arr.forEach(item => {
-            content += `<li id="${item.id}" ${item.status && `class="completed-task"`}>
-            <input type="checkbox" class="checkbox" ${item.status && `checked`}>
+            content += `<li id="${item.id}" class="${item.status ? 'completed-task' : ''}">
+            <input type="checkbox" class="checkbox" ${item.status && 'checked'}>
             <span>${item.text}</span>${delete_button}</li >`;
         });
         $todoList.html(content);
