@@ -2,6 +2,7 @@ $(document).ready(function () {
     const $form = $('#form');
     const $text = $('#text');
     const $todoList = $('#todoList');
+    const $clearAllButton = $('#clear-all-button');
 
     const delete_button = `<button class="delete-button">&#10060;</button>`;
 
@@ -27,6 +28,11 @@ $(document).ready(function () {
         render(todo);
     }
 
+    const onClearAllButton = () => {
+        todo.splice(0, todo.length);
+        $('li').remove();
+    }
+
     $form.on('submit', function (event) {
         event.preventDefault();
         onFormSubmit();
@@ -46,5 +52,9 @@ $(document).ready(function () {
             todo[checkedTuskIndex].status = $(this).prop("checked");
             render(todo);
         }
+    });
+
+    $clearAllButton.on('click', function () {
+        onClearAllButton();
     });
 })
