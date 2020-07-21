@@ -2,16 +2,18 @@ $(document).ready(function () {
     const $form = $('#form');
     const $text = $('#text');
     const $todoList = $('#todoList');
-    const $clearCheckedTasksButton = $('#clear-checked-tasks-button');
+    const $deleteCompleted = $('#delete-completed');
 
     const deleteButton = '<button class="delete-button">&#10060;</button>';
+
+    const COMPLETED_CLASS = 'completed-task';
 
     let todo = [];
 
     const render = (arr) => {
         let content = '';
         arr.forEach(item => {
-            content += `<li id="${item.id}" class="${item.status ? 'completed-task' : ''}">
+            content += `<li id="${item.id}" class="${item.status ? COMPLETED_CLASS : ''}">
             <input type="checkbox" class="checkbox" ${item.status && 'checked'}>
             <span>${item.text}</span>${deleteButton}</li >`;
         });
@@ -28,13 +30,8 @@ $(document).ready(function () {
         render(todo);
     }
 
-    const onClearCheckedTasksButton = (arr) => {
-        arr.forEach(item => {
-            if (item.status === true) {
-                const clearCheckedTasksIndex = arr.indexOf(item);
-                (clearCheckedTasksIndex !== -1) && arr.splice(clearCheckedTasksIndex, 1);
-            }
-        });
+    const onDeleteCompletedClick = () => {
+        todo = todo.filter(item => !item.status);
     }
 
     $form.on('submit', function (event) {
@@ -58,8 +55,8 @@ $(document).ready(function () {
         }
     });
 
-    $clearCheckedTasksButton.on('click', function () {
-        onClearCheckedTasksButton(todo);
+    $deleteCompleted.on('click', function () {
+        onDeleteCompletedClick();
         render(todo);
     });
 })
