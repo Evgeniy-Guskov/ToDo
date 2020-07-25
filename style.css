@@ -1,3 +1,11 @@
 .completed-task {
     opacity: 0.4;
 }
+
+.invalid-input {
+    border: solid red;
+}
+
+.valid-input {
+    border: solid green;
+}

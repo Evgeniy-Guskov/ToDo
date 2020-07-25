@@ -1,14 +1,18 @@
 $(document).ready(function () {
     const $form = $('#form');
     const $text = $('#text');
-    const $todoList = $('#todoList');
+    const $todoList = $('#todo-list');
     const $deleteCompleted = $('#delete-completed');
+    const $submitButton = $('#submit-button');
 
     const deleteButton = '<button class="delete-button">&#10060;</button>';
 
     const COMPLETED_CLASS = 'completed-task';
+    const VALID_CLASS = 'valid-input';
+    const INVALID_CLASS = 'invalid-input';
 
     let todo = [];
+    let validationCheck = false;
 
     const render = (arr) => {
         let content = '';
@@ -30,13 +34,56 @@ $(document).ready(function () {
         render(todo);
     }
 
+    const validationChecker = () => {
+        if (/^\s*$/.test($text.val())) {
+            validationCheck = false;
+        } else {
+            validationCheck = true;
+        }
+    }
+
+    const invalidationMarker = () => {
+        $text.attr('class', INVALID_CLASS);
+        $submitButton.attr('class', INVALID_CLASS);
+    }
+
+    const validationMarker = () => {
+        $text.attr('class', VALID_CLASS);
+        $submitButton.attr('class', VALID_CLASS);
+    }
+
+    const resetValidationLogic = () => {
+        validationCheck = false;
+        $text.removeAttr('class');
+        $submitButton.removeAttr('class');
+    }
+
     const onDeleteCompletedClick = () => {
         todo = todo.filter(item => !item.status);
     }
 
+    $form.on('input', function () {
+        validationChecker();
+        if (validationCheck) {
+            validationMarker();
+        } else {
+            invalidationMarker();
+        }
+    });
+
+    $text.on('blur', function () {
+        if (validationCheck === false) {
+            resetValidationLogic();
+            $text.val('');
+        }
+    });
+
     $form.on('submit', function (event) {
         event.preventDefault();
-        onFormSubmit();
+        if (validationCheck) {
+            onFormSubmit();
+            resetValidationLogic();
+        }
     });
 
     $todoList.on('click', '.delete-button', function () {
