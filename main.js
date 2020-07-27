@@ -12,7 +12,6 @@ $(document).ready(function () {
     const INVALID_CLASS = 'invalid-input';
 
     let todo = [];
-    let validationCheck = false;
 
     const render = (arr) => {
         let content = '';
@@ -34,28 +33,31 @@ $(document).ready(function () {
         render(todo);
     }
 
-    const validationChecker = () => {
+    const checkInputState = () => {
         if (/^\s*$/.test($text.val())) {
-            validationCheck = false;
+            return false;
         } else {
-            validationCheck = true;
+            return true;
         }
     }
 
-    const invalidationMarker = () => {
-        $text.attr('class', INVALID_CLASS);
-        $submitButton.attr('class', INVALID_CLASS);
-    }
-
-    const validationMarker = () => {
-        $text.attr('class', VALID_CLASS);
-        $submitButton.attr('class', VALID_CLASS);
+    const setInputState = (inputState) => {
+        if (inputState === true) {
+            $text.toggleClass(VALID_CLASS, true);
+            $submitButton.toggleClass(VALID_CLASS, true);
+            $text.toggleClass(INVALID_CLASS, false);
+            $submitButton.toggleClass(INVALID_CLASS, false);
+        } else {
+            $text.toggleClass(INVALID_CLASS, true);
+            $submitButton.toggleClass(INVALID_CLASS, true);
+            $text.toggleClass(VALID_CLASS, false);
+            $submitButton.toggleClass(VALID_CLASS, false);
+        }
     }
 
     const resetValidationLogic = () => {
-        validationCheck = false;
-        $text.removeAttr('class');
-        $submitButton.removeAttr('class');
+        $text.toggleClass(VALID_CLASS, false);
+        $submitButton.toggleClass(VALID_CLASS, false);
     }
 
     const onDeleteCompletedClick = () => {
@@ -63,24 +65,12 @@ $(document).ready(function () {
     }
 
     $form.on('input', function () {
-        validationChecker();
-        if (validationCheck) {
-            validationMarker();
-        } else {
-            invalidationMarker();
-        }
-    });
-
-    $text.on('blur', function () {
-        if (validationCheck === false) {
-            resetValidationLogic();
-            $text.val('');
-        }
+        setInputState(checkInputState());
     });
 
     $form.on('submit', function (event) {
         event.preventDefault();
-        if (validationCheck) {
+        if ($text.hasClass(VALID_CLASS)) {
             onFormSubmit();
             resetValidationLogic();
         }
