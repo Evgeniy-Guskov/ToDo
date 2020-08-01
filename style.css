@@ -6,6 +6,6 @@
     border: solid red;
 }
 
-.valid-input {
+.valid-input, .default-input {
     border: solid green;
 }

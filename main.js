@@ -7,11 +7,13 @@ $(document).ready(function () {
 
     const deleteButton = '<button class="delete-button">&#10060;</button>';
 
-    const COMPLETED_CLASS = 'completed-task';
-    const VALID_CLASS = 'valid-input';
-    const INVALID_CLASS = 'invalid-input';
+    const COMPLETED_CLASS = "completed-task";
+    const DEFAULT_CLASS = "default-input";
+    const VALID_CLASS = "valid-input";
+    const INVALID_CLASS = "invalid-input";
 
     let todo = [];
+    let inputState = false;
 
     const render = (arr) => {
         let content = '';
@@ -33,46 +35,45 @@ $(document).ready(function () {
         render(todo);
     }
 
-    const checkInputState = () => {
-        if (/^\s*$/.test($text.val())) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    const setInputState = (inputState) => {
-        if (inputState === true) {
-            $text.toggleClass(VALID_CLASS, true);
-            $submitButton.toggleClass(VALID_CLASS, true);
-            $text.toggleClass(INVALID_CLASS, false);
-            $submitButton.toggleClass(INVALID_CLASS, false);
-        } else {
-            $text.toggleClass(INVALID_CLASS, true);
-            $submitButton.toggleClass(INVALID_CLASS, true);
-            $text.toggleClass(VALID_CLASS, false);
-            $submitButton.toggleClass(VALID_CLASS, false);
-        }
-    }
-
-    const resetValidationLogic = () => {
-        $text.toggleClass(VALID_CLASS, false);
-        $submitButton.toggleClass(VALID_CLASS, false);
-    }
-
     const onDeleteCompletedClick = () => {
         todo = todo.filter(item => !item.status);
     }
 
+    const checkInputState = () => {
+        return !/^\s*$/.test($text.val());
+    }
+
+    const toggleFormStyles = () => {
+        $text.toggleClass(`${VALID_CLASS} ${INVALID_CLASS}`);
+        $submitButton.toggleClass(`${VALID_CLASS} ${INVALID_CLASS}`);
+        inputState = !inputState;
+    }
+
+    const oneFormInput = () => {
+        if (checkInputState()) {
+            $text.toggleClass(`${VALID_CLASS} ${DEFAULT_CLASS}`);
+            $submitButton.toggleClass(`${VALID_CLASS} ${DEFAULT_CLASS}`);
+        } else {
+            $text.toggleClass(`${INVALID_CLASS} ${DEFAULT_CLASS}`);
+            $submitButton.toggleClass(`${INVALID_CLASS} ${DEFAULT_CLASS}`);
+        }
+    }
+
+    $form.one('input', function () {
+        oneFormInput();
+    });
+
     $form.on('input', function () {
-        setInputState(checkInputState());
+        if (inputState !== checkInputState()) {
+            toggleFormStyles();
+        }
     });
 
     $form.on('submit', function (event) {
         event.preventDefault();
-        if ($text.hasClass(VALID_CLASS)) {
+        if (inputState) {
             onFormSubmit();
-            resetValidationLogic();
+            toggleFormStyles();
         }
     });
 
